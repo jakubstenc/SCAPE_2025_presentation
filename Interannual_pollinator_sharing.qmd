@@ -1,0 +1,501 @@
+---
+title: "Interannual pollinator sharing"
+author: "Jakub Štenc"
+format: 
+  beamer: 
+    aspectratio: 169
+    navigation: horizontal
+    include-in-header:
+      - text: |
+          \usepackage{techroom/beamerthemeExecushares}
+          \usepackage[absolute,overlay]{textpos}
+          \usepackage[document]{ragged2e}
+footer: "Jakub Štenc, 2025"
+bibliography: techroom/references.bib
+---
+
+## Intro
+
+\begin{justify}
+
+
+Plants often share pollinators within the plant-pollinator interaction network. However, our knowledge is very limited to a few seasons of observation, while the plant and pollinator populations are falling and rising, with an effect on the pollinator sharing stability. The goal is to investigate how un/stable the interactions and pollinator sharing are, to test if there are stable modules within the network and to what extent the changes in pollinator sharing among plants are driven by changes in plant abundance.
+
+
+
+\end{justify}
+
+```{css}
+/*| echo: false */
+figcaption {
+  margin: 2px;
+  line-height:1px;
+  text-align: center;
+}
+```
+
+::: {top="70" height="400"}
+```{r setup}
+#| include: false
+#-------------READ ME-----------####
+
+   # This script serves to the first exploration and pre-analyses of the data from Handrkov 2011-2024
+   # Log of possible problems, changes and comments etrc. can be found here: https://docs.google.com/document/d/1iAdDP0WE-Z7KCjPCh7StA5mAd4BrJD0UY1tZUGOXFSA/edit?tab=t.0
+
+
+#-------------READ ME-----------#
+
+# Packages #####
+
+library(bipartite)
+library("OpenImageR")
+library("jpeg")
+library(magick)
+library(igraph)
+library (iNEXT)
+library("dplyr") 
+library(tidyr)
+#--------------#
+
+# Colour definitions  ####
+seda <- rgb(150,150,150, max = 255, alpha = 60, names = "blue")
+modra <- rgb(104, 99, 219, max = 255, alpha = 80, names = "blue") #rgb(99, 155, 202)
+zelena <- rgb(0, 158, 115, max = 255)
+cervena <- rgb(220, 40, 100, max = 255)
+
+#--------------#
+
+
+
+# Data import ####
+jine_ctverce_spojene_11_24 <- read.csv("data/jine_ctverce_spojene_11_24.csv")
+net1124_edited<- jine_ctverce_spojene_11_24
+#--------------#
+
+# Unification of identificator ####
+# This identificator is to identify one visit of the plot - thus it combines year, plot, month, day, hour, minute
+net1124_edited$id_i<-as.character(net1124_edited$id_i)
+net1124_edited$id_i<-with(net1124_edited,paste(rok,osnova,mesic*100+den,hod*100+min,sep="-"))
+unique(net1124_edited$id_i)
+#--------------#
+
+
+net1124_edited$rok <- factor(net1124_edited$rok, levels = c("11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24"))
+
+# Standardization by sampling effort ####
+
+## Data preparation before standardization for sampling effort ####
+net1124_edited <-  net1124_edited[which(!net1124_edited$beh%in%c("Kratiny12_beh14","Kratiny12_beh12","Kratiny12_beh13","Kratiny12_beh11","Handrkov12_beh11", "Handrkov12_beh12", "Handrkov12_beh13")), ] # only Handrkov
+
+## Standardization computation ####
+# Standartization is computed by taking all the individual visits to the plot (coded by id_i) and the number of visits to the plot per year is obtained in following code
+
+poc.obejiti <-  net1124_edited %>% group_by(id_i, rok, osnova) %>% summarize(count=n()) 
+poc.obejiti$obejito <- 1    
+
+obejiti <-  tapply(poc.obejiti$obejito, list(poc.obejiti$osnova, poc.obejiti$rok),sum, na.rm=T) 
+
+
+obejiti2 <- obejiti 
+obejiti2 <- data.frame(obejiti2[!rownames(obejiti2)%in%c(30, 31, 42,43,97),])
+colnames(obejiti2) <- c(11:24)
+obejiti2$osnova <- rownames(obejiti2) 
+obejiti3 <- obejiti2 %>% pivot_longer(cols=c(colnames(obejiti2)[-15]),
+                                      names_to=c('rok'),
+                                      values_to='obejito')
+
+### plot sampling effort #####
+#pdf("Sampling_effort.pdf")
+par(mfrow=c(1,1))
+plot(tapply(obejiti3$obejito, list( obejiti3$rok), mean, na.rm=T), type="n", main="Sampling effort per year", ylab = "Average number of censuses per plot", xlab="Year",  col=rgb(0,0,0,0.25), axes = F, cex.lab=1.5, ylim= c(0,50))
+
+lines(tapply(obejiti3$obejito, list( obejiti3$rok), mean, na.rm=T), lwd = 2)
+
+axis(1, at=c(1:14), labels = c(2011:2024))
+axis(2)
+mean_plots <-tapply(obejiti3$obejito, list( obejiti3$rok), mean, na.rm=T)
+
+sd_plots <-tapply(obejiti3$obejito, list( obejiti3$rok), sd, na.rm=T)
+
+# Vertical arrow
+arrows(x0=c(1:14), y0=mean_plots-sd_plots, x1=c(1:14), y1=mean_plots+sd_plots, code=3, angle=90, length=0.1, col="black", lwd=2)
+
+#dev.off()
+#--------------#
+
+
+## Merge sampling effort with original table #####
+net1124_edited <- merge( jine_ctverce_spojene_11_24,obejiti3, by = c("osnova", "rok"), all = TRUE)  # Use all=TRUE for a full outer join
+
+
+# Data preparation #####
+## data cleaning ####
+net1124_edited <-  net1124_edited[which(!net1124_edited$osnova%in%c("L0","L1","L10","L11","L12","L2","L3","L4","L5","L6","L7","L8","L9")), ] # only plots in the meadow
+net1124_edited <-  net1124_edited[!net1124_edited$druhK_opraveno%in%c("UNDETERMINED_trifolium","Epilobium_sp","Kanutia_arvensis","Leontodon_sp","nic","Hypericum_perforatum","Lycopus_europaeus","Galium_boreale","Galium_glaucum"), ] # only plots in the meadow
+net1124_edited <-  net1124_edited[which(net1124_edited$opyluje%in%c("T","?" )), ] # only pollinators
+
+## Plant corrections ####
+net1124_edited[net1124_edited$druhK_opraveno%in% c("Cuscuta_sp") ,]$druhK_opraveno <- "Cuscuta_europaea"
+net1124_edited[net1124_edited$druhK_opraveno%in% c("Myosotis_sp") ,]$druhK_opraveno <- "Myosotis_palustris"
+net1124_edited[net1124_edited$druhK_opraveno%in% c("Stellaria_sp") ,]$druhK_opraveno <- "Stellaria_graminea"
+net1124_edited[net1124_edited$druhK_opraveno%in% c("Lysimachia_sp") ,]$druhK_opraveno <- "Lysimachia_vulgaris"
+
+net1124_edited <- droplevels(net1124_edited)
+
+
+## new variable - number of observations corrected by smapling eefort per plot within a year
+net1124_edited$corrected_number <- net1124_edited$pocet.x/net1124_edited$obejito
+
+#--------------#
+
+# General network data ####
+
+net1124  <-   apply( tapply(net1124_edited$pocet.x, list(net1124_edited$rok, net1124_edited$osnova), sum)/tapply(net1124_edited$obejito, list(net1124_edited$rok, net1124_edited$osnova), unique), 1, sum, na.rm=T)
+
+
+net1124 <- tapply(net1124_edited$corrected_number, list(net1124_edited$druhK_opraveno, net1124_edited$sitodruh), sum)
+
+net1124[is.na(net1124)] <- 0
+
+#--------------#
+
+
+## Datasets per individual years ####
+
+for (i in unique(net1124_edited$rok)) {
+  
+  # Create the data matrix for the current value of i
+  net <- with(net1124_edited[net1124_edited$rok %in% c(i),], 
+              tapply(corrected_number, list(druhK_opraveno, sitodruh), sum))
+  net[is.na(net)] <- 0
+  
+  # Dynamically assign the matrix to a variable named "net<i>"
+  assign(paste("net", i, sep = ""), net)
+}
+
+nets <- paste("net", unique(net1124_edited$rok), sep = "")
+
+
+## Datasets per hour ####
+
+for (i in unique(net1124_edited$hod)) {
+  
+  # Create the data matrix for the current value of i
+  net <- with(net1124_edited[net1124_edited$hod %in% c(i)&net1124_edited$rok=="21",], 
+              tapply(corrected_number, list(druhK_opraveno, sitodruh), sum))
+  net[is.na(net)] <- 0
+  
+  # Dynamically assign the matrix to a variable named "net<i>"
+  assign(paste("net_hod_", i, sep = ""), net)
+}
+
+nets <- paste("net_hod_", unique(net1124_edited$hod), sep = "")
+
+
+
+```
+:::
+
+::: {.absolute top="10%" left="10%" width="2000"}
+```{r echo=F, include=FALSE}
+# do this just once
+par(oma=c(0,0,0,0), mar=c(0,0,0,0),bg="transparent")
+plotweb(
+  net1124, 
+  method = "normal", 
+  text.rot = 90, 
+  labsize = 0.000000000000001, 
+  ybig = 0.8, 
+  low.y = 0.6, 
+  high.y = 0.98, 
+  plot.axes = FALSE, 
+  y.width.low = 0.05, 
+  y.width.high = 0.05, 
+  low.spacing = 0.01, 
+  high.spacing = 0.01, 
+  arrow="up",
+  bor.col.low = zelena, 
+  col.low = zelena, 
+  col.high = cervena, 
+  bor.col.high = cervena, 
+  bor.col.interaction = modra, 
+  col.interaction = modra
+)
+```
+:::
+
+::: {.absolute top="75%" left="55%"}
+-   But what does it mean for pollen transfer?
+:::
+
+## Methods - the locality
+
+::: {layout-ncol="2"}
+![[Czech Republic]{style="font-size: 32px;"}](images/Picture9.png){width="200"}
+
+![[Rich in flowers]{style="font-size: 32px;"}](images/banner.jpg){width="400"}
+:::
+
+::: {.absolute .fragment top="100" right="380"}
+-   15 years of data collection (2011-2025)
+:::
+
+## Methods - permanent plots
+
+---
+fig-cap-location: top
+---
+
+```{=html}
+<style>
+ #slide1 .quarto-title-caption {
+  font-size: 22px;
+  }
+</style>
+```
+
+<div>
+
+:::::: {layout="[0.3,  0.3, 0.3]"}
+::: {.fragment top="100" height="200"}
+![[plots are marked]{style="font-size: 32px;"}](images/Picture3.jpg){width="180"}
+:::
+
+::: {.fragment top="100" height="200"}
+![[recovered every year]{style="font-size: 32px;"}](images/Picture2.jpg){width="180"}
+:::
+
+::: {#sec-column .fragment top="100" height="700"}
+![[93 plots in total (+ 10 "edges")]{style="font-size: 32px;"}](images/han_map_1.png)
+:::
+::::::
+
+</div>
+
+## Methods - plant-pollinator survey
+
+<div>
+
+::::: {layout="[0.5, 0.5]"}
+::: {.fragment top="70" height="400"}
+![[Plant survey]{style="font-size: 32px;"}](images/Picture1.jpg)
+:::
+
+::: {.fragment top="70" height="400"}
+![[Pollinator survey]{style="font-size: 32px;"}](images/Picture5.jpg)
+:::
+:::::
+
+</div>
+
+## Methods - plant survey
+
+<div>
+
+::::: {layout="[0.5, 0.5]"}
+::: {.fragment top="70" height="400"}
+![](images/Picture1.jpg)
+:::
+
+<div>
+
+<!-- empty column to create gap -->
+
+</div>
+:::::
+
+</div>
+
+::: {.absolute .fragment top="33%" left="55%"}
+-   4 x 4 meter squares
+-   divided to 64 0.5 x 0.5 subplots
+-   Stalks of flowering plants are counted or scored presence/absence in subplots
+-   2 times per sampling period
+-   Data needs to be integrated together - plot or subplot level?
+:::
+
+## Methods - pollinator survey
+
+<div>
+
+::::: {layout="[0.5, 0.5]"}
+::: {.fragment top="70" height="400"}
+![](images/Picture5.jpg)
+:::
+
+<div>
+
+<!-- empty column to create gap -->
+
+</div>
+:::::
+
+</div>
+
+::: {.absolute .fragment top="33%" left="55%"}
+-   "Snapshot" of plant-pollinator interaction
+-   = all interactions recorded, every flower unit observed once per sampling
+-   20+ sampling per plot per year
+-   Correction for sampling effort
+-   14 000/80 000 entries needs to be checked\
+:::
+
+## Pollinator sharing among plants
+
+::: {bottom="10" height="400"}
+![](images/unnamed-chunk-4-1.png){fig-align="center" width="240"}
+:::
+
+## Annual variation in pollinator sharing
+
+<div>
+
+::::: {layout="[0.95, 0.05]"}
+::: {.fragment top="90" height="400"}
+![](images/annual_variation.png){fig-align="center" fig-pos="b"}
+:::
+
+<div>
+
+<!-- empty column to create gap -->
+
+</div>
+:::::
+
+## Diurnal variation in pollinator sharing
+
+::::: {layout="[0.95, 0.05]"}
+::: {.fragment top="90" height="400"}
+![](images/diurnal_variation.png){fig-align="center" fig-pos="b"}
+:::
+
+<div>
+
+<!-- empty column to create gap -->
+
+</div>
+:::::
+
+## Pollen availability during the day
+
+::::: {layout="[0.95, 0.05]"}
+::: {.fragment bottom="1" height="400"}
+![](images/pollen_pres.png){fig-align="center" width="363" fig-pos="b"}
+:::
+
+<div>
+
+<!-- empty column to create gap -->
+
+</div>
+:::::
+
+## Pollen transfer during the day
+
+![](images/pollen_tra.png){fig-align="center" width="139"}
+
+## Pollen deposition
+
+![](images/stigma.png){fig-align="center" width="243"}
+
+## Pollen deposition
+
+![](images/Blizna_Suc_pra_2.jpg){fig-align="center" width="187"}
+
+## Interannual dynamics - Questions
+
+-   Is pollinator sharing between pairs of plant species stable over years?
+
+-   Which pair of plants are stable and which ones are variable over years?
+
+-   Can we identify stable modules within the network?
+
+-   How much is pollinator sharing driven by changes in plant abundances and how much by other factors (which ones?)
+
+## Pollen deposition - questions
+
+-   Does longer exposition of stigma leads to higher deposition than necessary for seed development?
+
+-   Can longevity serve as mechanism to allow accumulation of pollen?
+
+-   Does longer exposition leads to higher proportion of HP?
+
+## Progress?
+
+So far not so much
+
+## The plan
+
+<div>
+
+:::: {layout="[0.95, 0.05]"}
+<div>
+
+<!-- empty column to create gap -->
+
+</div>
+::::
+
+</div>
+
+-   ![](images/clipboard-2969939425.png){width="30"} - to clean the data and prepare the data sets for analysis (in progress)
+
+-   ![](images/clipboard-3558150951.png){width="30"} - make a package for repeated analyses
+
+-   ![](images/clipboard-229370691.png){width="30"} - analyse the stability of pollinator sharing
+
+-   ![](images/clipboard-2272430511.png){width="30"} - write down the MS - draft around Christmass
+
+## Data cleaning ![](images/clipboard-2969939425.png){width="20"}
+
+-   Plant abundances - now facing the cleaning and decision-making
+
+-   Plant-pollinator interactions - 29th of September another meeting (11% to be solved)
+
+-   Support data - coordinates, climatic data, traits data
+
+## HanPolNet package ![](images/clipboard-3558150951.png){width="20"}
+
+-   One package to rule all the data - including support data
+
+-   Fully available at Github [![](images/clipboard-4080856661.png){width="30"}](https://github.com/Pollination-Ecology-Group/HanPolNet)
+
+-   First step: the structure
+
+-   I started yesterday
+
+## Analysis ![](images/clipboard-229370691.png){width="20"}
+
+![](images/clipboard-4279740602.png){fig-align="center" width="200"}
+
+## Analysis ![](images/clipboard-229370691.png){width="20"}
+
+-   Interested in seeing stability of
+
+    -   plant species abundance
+
+    -   plant distribution patterns
+
+    -   plant-pollinator interactions
+
+    -   pollinator sharing between plant species
+
+## SCAPE 2025
+
+::::: {layout="[0.5, 0.5]"}
+::: {.fragment top="70" height="400"}
+-   data for pollinator sharing of one plant species
+
+-   Data for pollen transfer to that one species from others
+
+-   Developing the idea on it
+
+-   Using it to test my package functionality
+:::
+
+::: {.fragment top="70" height="400"}
+![](images/Blizna_Suc_pra_2.jpg){fig-align="center" width="150"}
+:::
+:::::
+
+</div>
