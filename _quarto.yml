@@ -2,3 +2,5 @@ project:
   title: "SCAPE2025"
   type: website
   output-dir: docs
+resources:
+  - images/video_intro_reduced_shorter.mp4
