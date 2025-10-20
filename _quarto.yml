@@ -1,0 +1,4 @@
+project:
+  title: "SCAPE2025"
+  type: website
+  output-dir: docs
