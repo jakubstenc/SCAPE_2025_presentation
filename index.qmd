@@ -18,6 +18,7 @@ format:
     transition: none
     center-title-slide: false
     self_contained: false
+    embed-resources: false
 editor: visual    
 bibliography: techroom/references.bib
 ---
@@ -671,6 +672,9 @@ plot_plant_sharing_network(
 :::
 
 ## Future steps?
+
+![](images/unnamed-chunk-4-1.png){fig-align="center" width="620" top="-20"}
+
 
 ## EcoFlor 2026!
 
