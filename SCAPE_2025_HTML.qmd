@@ -674,6 +674,8 @@ plot_plant_sharing_network(
 
 ## EcoFlor 2026!
 
+![](images/logo_without_bakground_small.png)
+
 #  {background-image="images/Fin.jpg" style="text-align: center;"}
 
 <head>
