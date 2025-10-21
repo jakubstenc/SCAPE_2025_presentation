@@ -18,8 +18,6 @@ format:
     transition: none
     center-title-slide: false
     self_contained: false
-    embed-resources: false
-editor: visual    
 bibliography: techroom/references.bib
 ---
 
@@ -75,7 +73,7 @@ figcaption {
 #-------------READ ME - fin -----------#
 
 # Packages #####
-
+library(devtools)
 library(bipartite)
 library("OpenImageR")
 library("jpeg")
@@ -96,7 +94,7 @@ library(tidyr)
 devtools::install_github("Pollination-Ecology-Group/HanPolNet",force = TRUE)
 
 # It should now load correctly
-library(HanPolNet)
+library("HanPolNet")
 #--------------#
 
 # Colour definitions  ####
@@ -671,10 +669,27 @@ plot_plant_sharing_network(
 ```
 :::
 
+## Pollen deposition on *Succisa* 
+
+```{r}
+# Make nodes bigger (factor of 10) and edges thicker (factor of 1)
+
+par(mai=c(0.1,0.1,0.1,0.1),mfrow=c(1,3),tcl=-0.7,bg="transparent")
+for (i in 22:24) {
+mtext(paste("", i), side = 3, line = -4)  
+
+plot_pollen_network(
+    years = i,
+    focal_plant = "Suc_pra",
+    vertex_size_transform = function(pollen) 3* log(pollen),
+    edge_width_transform = function(weight) 1 * log(weight)
+)
+  }
+```
+
 ## Future steps?
 
 ![](images/unnamed-chunk-4-1.png){fig-align="center" width="620" top="-20"}
-
 
 ## EcoFlor 2026!
 
