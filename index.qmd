@@ -667,7 +667,7 @@ print(plot_by_year)
 <h2 style="text-align:center;color:white;">
 
 ::: {style="background-color: rgba(0, 0, 0, .8); backdrop-filter: blur(5px); box-shadow: 0 0 1rem 0 rgba(0, 0, 0, .5); border-radius: 5px;;text-align:center;"}
-In 2024 lower heterospecific pollen grains deposited! 
+In 2024 less heterospecific pollen grains deposited! 
 :::
 </h2>
 ::::
