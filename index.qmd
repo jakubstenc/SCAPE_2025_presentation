@@ -270,7 +270,7 @@ nets <- paste("net_hod_", unique(net1124_edited$hod), sep = "")
 ![ ](images/Blizna_Suc_pra_2_round.png){fig-align="center" width="520" top="-20"}
 :::
 
-:::: {.fragment}
+:::: fragment
 <h2 style="text-align:center;color:white;">
 
 ::: {style="background-color: rgba(0, 0, 0, .8); backdrop-filter: blur(5px); box-shadow: 0 0 1rem 0 rgba(0, 0, 0, .5); border-radius: 5px;;text-align:center;"}
@@ -349,16 +349,15 @@ fig-cap-location: top
 
 <div>
 
-::::: {layout="[0.5, 0.5]"}
+:::: {layout="[0.5, 0.5]"}
 ::: {.fragment top="70" height="400"}
 ![](images/Picture1.jpg)
 :::
 
 <!-- empty column to create gap -->
+::::
 
-:::::
 </div>
-
 
 ::: {.absolute .fragment top="10%" left="55%"}
 -   4 x 4 meter squares
@@ -371,17 +370,18 @@ fig-cap-location: top
 
 <div>
 
-:::: {layout="[0.5, 0.5]"}
+::::: {layout="[0.5, 0.5]"}
 ::: {.fragment top="70" height="400"}
 ![](images/Picture5.jpg)
 :::
+
 <div>
 
 <!-- empty column to create gap -->
+
 </div>
+:::::
 
-
-::::
 </div>
 
 ::: {.absolute .fragment top="10%" left="55%"}
@@ -567,11 +567,11 @@ for (i in 22:24) {
 ![](images/Blizna_Suc_pra_2_round.png)
 :::
 
-<div></div>
+<div>
 
+</div>
 
 <!-- empty column to create gap -->
-
 :::::
 
 </div>
@@ -585,6 +585,7 @@ for (i in 22:24) {
 :::
 
 ## Results
+
 :::: {.fragment top="50%"}
 <h2 style="text-align:center;color:white;">
 
@@ -594,8 +595,10 @@ Still preliminary.
 
 </h2>
 ::::
+
 ## Plant abundance
-::::: r-stack
+
+:::::: r-stack
 ::: fragment
 ```{r}
 # 1. Get the necessary data
@@ -616,17 +619,21 @@ print(p_year)
 
 ```
 :::
-:::: {.fragment}
+
+:::: fragment
 <h2 style="text-align:center;color:white;">
 
 ::: {style="background-color: rgba(0, 0, 0, .8); backdrop-filter: blur(5px); box-shadow: 0 0 1rem 0 rgba(0, 0, 0, .5); border-radius: 5px;;text-align:center;"}
-In 2024 lower abundance of heterospecific neigboors! 
+In 2024 lower abundance of heterospecific neigboors!
 :::
+
 </h2>
 ::::
-:::::
+::::::
+
 ## Pollinator visitation
-::::: r-stack
+
+:::::: r-stack
 ::: fragment
 ```{r}
 
@@ -643,7 +650,7 @@ print(plot_linear)
 ```
 :::
 
-:::: {.fragment}
+:::: fragment
 <h2 style="text-align:center;color:white;">
 
 ::: {style="background-color: rgba(0, 0, 0, .8); backdrop-filter: blur(5px); box-shadow: 0 0 1rem 0 rgba(0, 0, 0, .5); border-radius: 5px;;text-align:center;"}
@@ -652,9 +659,11 @@ Not a huge difference between years!
 
 </h2>
 ::::
-:::::
+::::::
+
 ## Annual variation in pollen deposition
-::::: r-stack
+
+:::::: r-stack
 ::: fragment
 ```{r echo=FALSE}
 
@@ -663,16 +672,19 @@ plot_by_year <- plot_pollen_deposition(colors = c(Conspecific = "lightseagreen",
 print(plot_by_year)
 ```
 :::
-:::: {.fragment}
+
+:::: fragment
 <h2 style="text-align:center;color:white;">
 
 ::: {style="background-color: rgba(0, 0, 0, .8); backdrop-filter: blur(5px); box-shadow: 0 0 1rem 0 rgba(0, 0, 0, .5); border-radius: 5px;;text-align:center;"}
-In 2024 less heterospecific pollen grains deposited! 
+In 2024 less heterospecific pollen grains deposited!
 :::
+
 </h2>
 ::::
-:::::
-## Pollinator sharing 
+::::::
+
+## Pollinator sharing
 
 ::: fragment
 ```{r}
@@ -699,6 +711,7 @@ plot_plant_sharing_network(
 :::
 
 ## Pollen deposition on *Succisa*
+
 ::::: r-stack
 ```{r}
 # Make nodes bigger (factor of 10) and edges thicker (factor of 1)
@@ -716,49 +729,53 @@ plot_pollen_network(
 
   }
 ```
-:::: {.fragment}
+
+:::: fragment
 <h2 style="text-align:center;color:white;">
 
 ::: {style="background-color: rgba(0, 0, 0, .8); backdrop-filter: blur(5px); box-shadow: 0 0 1rem 0 rgba(0, 0, 0, .5); border-radius: 5px;;text-align:center;"}
-This should be tested. Somehow. 
-:::
-
-</h2>
-::::
-::::::
-
-
-## Future steps?
-
-::::: r-stack
-::: fragment
-![](images/unnamed-chunk-4-1.png){fig-align="center" width="620" top="-20"}
-:::
-::: fragment
-![ ](images/Blizna_Suc_pra_2_round.png){fig-align="center" width="500" top="-20"}
-:::
-:::: {.fragment}
-<h2 style="text-align:center;color:white;">
-
-::: {style="background-color: rgba(0, 0, 0, .8); backdrop-filter: blur(5px); box-shadow: 0 0 1rem 0 rgba(0, 0, 0, .5); border-radius: 5px;;text-align:center;"}
-Whole network level! 
-:::
-
-</h2>
-::::
-:::: {.fragment}
-<h2 style="text-align:center;color:white;">
-
-::: {style="background-color: rgba(0, 0, 0, .8); backdrop-filter: blur(5px); box-shadow: 0 0 1rem 0 rgba(0, 0, 0, .5); border-radius: 5px;;text-align:center;"}
-Still collecting ideas. 
+This should be tested. Somehow.
 :::
 
 </h2>
 ::::
 :::::
+
+## Future steps?
+
+::::::::: r-stack
+::: fragment
+![](images/unnamed-chunk-4-1.png){fig-align="center" width="620" top="-20"}
+:::
+
+::: fragment
+![ ](images/Blizna_Suc_pra_2_round.png){fig-align="center" width="500" top="-20"}
+:::
+
+:::: fragment
+<h2 style="text-align:center;color:white;">
+
+::: {style="background-color: rgba(0, 0, 0, .8); backdrop-filter: blur(5px); box-shadow: 0 0 1rem 0 rgba(0, 0, 0, .5); border-radius: 5px;;text-align:center;"}
+Whole network level!
+:::
+
+</h2>
+::::
+
+:::: fragment
+<h2 style="text-align:center;color:white;">
+
+::: {style="background-color: rgba(0, 0, 0, .8); backdrop-filter: blur(5px); box-shadow: 0 0 1rem 0 rgba(0, 0, 0, .5); border-radius: 5px;;text-align:center;"}
+Still collecting ideas.
+:::
+
+</h2>
+::::
+:::::::::
+
 ## EcoFlor 2026!
 
-![](images/logo_without_bakground_small.png) 
+![](images/IMG_1108.jpg){fig-align="center" width="800"}
 
 #  {background-image="images/Fin.jpg" style="text-align: center;"}
 
@@ -807,8 +824,7 @@ jakubstenc\@gmail.com
 
 ![](images/CREAF-SO-logo-pluma_blanca-ESP.png){.absolute bottom="0%" left="0" width="250"}
 
-![](images/logoPrF1.png){.absolute bottom="8%" left="0%" width="184"} 
-![](images/pyl.png){.absolute bottom="8%" right="5%" width="184"}
+![](images/logoPrF1.png){.absolute bottom="8%" left="0%" width="184"} ![](images/pyl.png){.absolute bottom="8%" right="5%" width="184"}
 
 </body>
 
