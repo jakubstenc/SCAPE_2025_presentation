@@ -407,7 +407,7 @@ fig-cap-location: top
 
 ![](images/DJI_0092.JPG)
 
-## Methods - plant-pollinator survey
+## Methods - pollinator sharing
 
 :::: {layout="[0.95, 0.05]"}
 ::: {.fragment top="90" height="400"}
@@ -540,7 +540,7 @@ for (i in 22:24) {
   plot(
     proj$proj1,
     layout = l,
-    edge.width = E(proj$proj1)$weight**0.1,
+    edge.width = E(proj$proj1)$weight,
     vertex.label = NA,  # Suppress default labels
     vertex.size = V(proj$proj1)$size,
     vertex.color = 3,
@@ -558,7 +558,7 @@ for (i in 22:24) {
 }
 ```
 
-## Methods - Pollen deposition
+## Methods - pollen deposition
 
 <div>
 
@@ -585,9 +585,17 @@ for (i in 22:24) {
 :::
 
 ## Results
+:::: {.fragment top="50%"}
+<h2 style="text-align:center;color:white;">
 
+::: {style="background-color: rgba(0, 0, 0, .8); backdrop-filter: blur(5px); box-shadow: 0 0 1rem 0 rgba(0, 0, 0, .5); border-radius: 5px;;text-align:center;"}
+Still preliminary.
+:::
+
+</h2>
+::::
 ## Plant abundance
-
+::::: r-stack
 ::: fragment
 ```{r}
 # 1. Get the necessary data
@@ -608,10 +616,17 @@ print(p_year)
 
 ```
 :::
+:::: {.fragment}
+<h2 style="text-align:center;color:white;">
 
-
+::: {style="background-color: rgba(0, 0, 0, .8); backdrop-filter: blur(5px); box-shadow: 0 0 1rem 0 rgba(0, 0, 0, .5); border-radius: 5px;;text-align:center;"}
+In 2024 lower abundance of heterospecific neigboors! 
+:::
+</h2>
+::::
+:::::
 ## Pollinator visitation
-
+::::: r-stack
 ::: fragment
 ```{r}
 
@@ -628,9 +643,18 @@ print(plot_linear)
 ```
 :::
 
+:::: {.fragment}
+<h2 style="text-align:center;color:white;">
 
+::: {style="background-color: rgba(0, 0, 0, .8); backdrop-filter: blur(5px); box-shadow: 0 0 1rem 0 rgba(0, 0, 0, .5); border-radius: 5px;;text-align:center;"}
+Not a huge difference between years!
+:::
+
+</h2>
+::::
+:::::
 ## Annual variation in pollen deposition
-
+::::: r-stack
 ::: fragment
 ```{r echo=FALSE}
 
@@ -639,7 +663,15 @@ plot_by_year <- plot_pollen_deposition(colors = c(Conspecific = "lightseagreen",
 print(plot_by_year)
 ```
 :::
+:::: {.fragment}
+<h2 style="text-align:center;color:white;">
 
+::: {style="background-color: rgba(0, 0, 0, .8); backdrop-filter: blur(5px); box-shadow: 0 0 1rem 0 rgba(0, 0, 0, .5); border-radius: 5px;;text-align:center;"}
+In 2024 lower heterospecific pollen grains deposited! 
+:::
+</h2>
+::::
+:::::
 ## Pollinator sharing 
 
 ::: fragment
@@ -667,7 +699,7 @@ plot_plant_sharing_network(
 :::
 
 ## Pollen deposition on *Succisa*
-
+::::: r-stack
 ```{r}
 # Make nodes bigger (factor of 10) and edges thicker (factor of 1)
 
@@ -684,6 +716,17 @@ plot_pollen_network(
 
   }
 ```
+:::: {.fragment}
+<h2 style="text-align:center;color:white;">
+
+::: {style="background-color: rgba(0, 0, 0, .8); backdrop-filter: blur(5px); box-shadow: 0 0 1rem 0 rgba(0, 0, 0, .5); border-radius: 5px;;text-align:center;"}
+This should be tested. Somehow. 
+:::
+
+</h2>
+::::
+::::::
+
 
 ## Future steps?
 
@@ -703,7 +746,15 @@ Whole network level!
 
 </h2>
 ::::
+:::: {.fragment}
+<h2 style="text-align:center;color:white;">
 
+::: {style="background-color: rgba(0, 0, 0, .8); backdrop-filter: blur(5px); box-shadow: 0 0 1rem 0 rgba(0, 0, 0, .5); border-radius: 5px;;text-align:center;"}
+Still collecting ideas. 
+:::
+
+</h2>
+::::
 :::::
 ## EcoFlor 2026!
 
@@ -752,11 +803,12 @@ jakubstenc\@gmail.com
 ::: {.absolute top="55%" left="65%"}
 :::
 
-![](images/Logo%20EN%20BWlogo.png){.absolute bottom="60%" left="-10" width="200"}
+![](images/Logo%20EN%20BWlogo.png){.absolute bottom="60%" left="10" width="200"}
 
 ![](images/CREAF-SO-logo-pluma_blanca-ESP.png){.absolute bottom="0%" left="0" width="250"}
 
-![](images/logoPrF1.png){.absolute bottom="8%" left="-10%" width="184"} ![](images/pyl.png){.absolute bottom="8%" right="0%" width="184"}
+![](images/logoPrF1.png){.absolute bottom="8%" left="0%" width="184"} 
+![](images/pyl.png){.absolute bottom="8%" right="5%" width="184"}
 
 </body>
 
