@@ -270,7 +270,7 @@ nets <- paste("net_hod_", unique(net1124_edited$hod), sep = "")
 ![ ](images/Blizna_Suc_pra_2_round.png){fig-align="center" width="520" top="-20"}
 :::
 
-:::: fragment
+:::: {.fragment}
 <h2 style="text-align:center;color:white;">
 
 ::: {style="background-color: rgba(0, 0, 0, .8); backdrop-filter: blur(5px); box-shadow: 0 0 1rem 0 rgba(0, 0, 0, .5); border-radius: 5px;;text-align:center;"}
@@ -279,8 +279,6 @@ Does pollinator sharing translate to pollen deposition?
 
 </h2>
 ::::
-::::::::
-
 ::::::::
 
 ## Methods - the locality
@@ -356,14 +354,11 @@ fig-cap-location: top
 ![](images/Picture1.jpg)
 :::
 
-<div>
-
 <!-- empty column to create gap -->
 
-</div>
 :::::
-
 </div>
+
 
 ::: {.absolute .fragment top="10%" left="55%"}
 -   4 x 4 meter squares
@@ -376,18 +371,17 @@ fig-cap-location: top
 
 <div>
 
-::::: {layout="[0.5, 0.5]"}
+:::: {layout="[0.5, 0.5]"}
 ::: {.fragment top="70" height="400"}
 ![](images/Picture5.jpg)
 :::
-
 <div>
 
 <!-- empty column to create gap -->
-
 </div>
-:::::
 
+
+::::
 </div>
 
 ::: {.absolute .fragment top="10%" left="55%"}
@@ -573,11 +567,11 @@ for (i in 22:24) {
 ![](images/Blizna_Suc_pra_2_round.png)
 :::
 
-<div>
+<div></div>
+
 
 <!-- empty column to create gap -->
 
-</div>
 :::::
 
 </div>
@@ -615,6 +609,7 @@ print(p_year)
 ```
 :::
 
+
 ## Pollinator visitation
 
 ::: fragment
@@ -633,7 +628,8 @@ print(plot_linear)
 ```
 :::
 
-## Annual variation in pollinator sharing
+
+## Annual variation in pollen deposition
 
 ::: fragment
 ```{r echo=FALSE}
@@ -644,7 +640,7 @@ print(plot_by_year)
 ```
 :::
 
-## network structure
+## Pollinator sharing 
 
 ::: fragment
 ```{r}
@@ -663,20 +659,20 @@ plot_plant_sharing_network(
   plant_abundance_data = plant_abund_std,
   focal_plant = "Suc_pra"
 )
+    mtext(paste("Year:", i), side = 3, line = -4)  
 
 }
 
 ```
 :::
 
-## Pollen deposition on *Succisa* 
+## Pollen deposition on *Succisa*
 
 ```{r}
 # Make nodes bigger (factor of 10) and edges thicker (factor of 1)
 
 par(mai=c(0.1,0.1,0.1,0.1),mfrow=c(1,3),tcl=-0.7,bg="transparent")
 for (i in 22:24) {
-mtext(paste("", i), side = 3, line = -4)  
 
 plot_pollen_network(
     years = i,
@@ -684,16 +680,34 @@ plot_pollen_network(
     vertex_size_transform = function(pollen) 3* log(pollen),
     edge_width_transform = function(weight) 1 * log(weight)
 )
+    mtext(paste("Year:", i), side = 3, line = -4)  
+
   }
 ```
 
 ## Future steps?
 
+::::: r-stack
+::: fragment
 ![](images/unnamed-chunk-4-1.png){fig-align="center" width="620" top="-20"}
+:::
+::: fragment
+![ ](images/Blizna_Suc_pra_2_round.png){fig-align="center" width="500" top="-20"}
+:::
+:::: {.fragment}
+<h2 style="text-align:center;color:white;">
 
+::: {style="background-color: rgba(0, 0, 0, .8); backdrop-filter: blur(5px); box-shadow: 0 0 1rem 0 rgba(0, 0, 0, .5); border-radius: 5px;;text-align:center;"}
+Whole network level! 
+:::
+
+</h2>
+::::
+
+:::::
 ## EcoFlor 2026!
 
-![](images/logo_without_bakground_small.png)
+![](images/logo_without_bakground_small.png) 
 
 #  {background-image="images/Fin.jpg" style="text-align: center;"}
 
