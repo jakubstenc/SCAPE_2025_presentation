@@ -1,23 +1,21 @@
 ---
 format: 
   revealjs:
-    embed-resources: true 
-    aspectratio: 169
+    embed-resources: false 
+    aspectratio: 43
     navigation: horizontal
     print-background: true
     partial-slides: true
     multiplex: false
     slide-number: c/t
-    width: 1050
-    height: 700
     incremental: false
     theme: techroom/pp.scss
     logo: images/pyl.png
-    footer: "Jakub Štenc, Charles University, Czech Republic"
+    footer: "Jakub Štenc, Charles University, Czech Republic + CREAF, Spain"
     background-transition: fade
     transition: none
     center-title-slide: false
-    self_contained: false
+    self_contained: true
 bibliography: techroom/references.bib
 ---
 
@@ -27,10 +25,12 @@ bibliography: techroom/references.bib
 
 <body>
 
-<h2 style="text-align:center;color:white;">
+<h2 style="text-align:center;font-size: 40px;color:white;">
 
-::: {style="background-color: rgba(255, 255, 255, .4); backdrop-filter: blur(5px); box-shadow: 0 0 1rem 0 rgba(0, 0, 0, .5); border-radius: 5px;"}
-Pollen deposition on *Succisa pratensis* in a dynamic plant-pollinator network Jakub Štenc and company
+::: {style="background-color: rgba(0, 0, 0, .5); backdrop-filter: blur(5px); box-shadow: 0 0 1rem 0 rgba(0, 0, 0, .5); border-radius: 5px;"}
+Pollen deposition on *Succisa pratensis* in a dynamic plant-pollinator network
+
+Jakub Štenc and company
 :::
 
 </h2>
@@ -91,7 +91,7 @@ library(tidyr)
 # It's a good idea to restart your R session now (Session > Restart R)
 
 # Now, re-install the fresh, complete version from GitHub
-devtools::install_github("Pollination-Ecology-Group/HanPolNet",force = TRUE)
+#devtools::install_github("Pollination-Ecology-Group/HanPolNet",force = TRUE)
 
 # It should now load correctly
 library("HanPolNet")
@@ -241,20 +241,26 @@ nets <- paste("net_hod_", unique(net1124_edited$hod), sep = "")
 
 ## Introduction - visitation
 
-![](images/pestrenky_round.png){fig-align="center"}
+![](images/pestrenky_round.png){fig-align="center" width="600"}
 
 ## Introduction - pollen transfer
 
-![](images/E.interuptus_round.png){fig-align="center"}
+![](images/E.interuptus_round.png){fig-align="center" width="600"}
 
 ## Introduction - deposition
 
-![](images/stigma.png){fig-align="center" width="500"}
+![](images/stigma.png){fig-align="center" width="600"}
 
 ## Introduction - deposition
+:::::::: r-stack
+::: fragment
+![](images/Blizna_Suc_pra_2_round.png){fig-align="center" width="600"}
+:::
+::: fragment
 
-![](images/Blizna_Suc_pra_2_round.png){fig-align="center"}
-
+![](images/Blizna_Suc_pra_3.png){fig-align="center" width="600"}
+:::
+:::::::: 
 ## Introduction
 
 :::::::: r-stack
@@ -263,12 +269,14 @@ nets <- paste("net_hod_", unique(net1124_edited$hod), sep = "")
 :::
 
 ::: fragment
-![ ](images/pestrenky_round.png){fig-align="center" width="500" top="-20"}
+![](images/pestrenky_round.png){fig-align="center" width="500" top="-20"}
 :::
 
 ::: fragment
-![ ](images/Blizna_Suc_pra_2_round.png){fig-align="center" width="520" top="-20"}
+![](images/Blizna_Suc_pra_2_round.png){fig-align="center" width="520" top="-20"}
 :::
+
+
 
 :::: fragment
 <h2 style="text-align:center;color:white;">
@@ -562,11 +570,24 @@ for (i in 22:24) {
 
 <div>
 
-::::: {layout="[0.5, 0.5]"}
+::::::: {layout="[0.5, 0.5]"}
+:::::: r-stack
+
 ::: {.fragment top="70" height="400"}
+
+![](images/Suc_pra.png)
+:::
+::: fragment
+
+
 ![](images/Blizna_Suc_pra_2_round.png)
 :::
 
+::: fragment
+
+![](images/Blizna_Suc_pra_3.png)
+:::
+::::::
 <div>
 
 </div>
@@ -576,7 +597,7 @@ for (i in 22:24) {
 
 </div>
 
-::: {.absolute .fragment top="10%" left="55%"}
+::: {.absolute top="10%" left="55%"}
 -   Target species: *Succisa pratensis*
 -   2022 - 2023 - 2024
 -   3 stigmas per plant collected
@@ -594,7 +615,7 @@ Still preliminary.
 :::
 
 </h2>
-::::
+::::::
 
 ## Plant abundance
 
@@ -624,7 +645,7 @@ print(p_year)
 <h2 style="text-align:center;color:white;">
 
 ::: {style="background-color: rgba(0, 0, 0, .8); backdrop-filter: blur(5px); box-shadow: 0 0 1rem 0 rgba(0, 0, 0, .5); border-radius: 5px;;text-align:center;"}
-In 2024 lower abundance of heterospecific neigboors!
+Lower and lower abundance of heterospecific neigboors!
 :::
 
 </h2>
@@ -668,7 +689,7 @@ Not a huge difference between years!
 ```{r echo=FALSE}
 
 ## Pollen deposition between years
-plot_by_year <- plot_pollen_deposition(colors = c(Conspecific = "lightseagreen", Heterospecific = "lightcoral"))
+plot_by_year <- plot_pollen_deposition(colors = c(Conspecific = "lightseagreen", Heterospecific = "lightcoral"),   add_stats = FALSE)
 print(plot_by_year)
 ```
 :::
@@ -677,7 +698,7 @@ print(plot_by_year)
 <h2 style="text-align:center;color:white;">
 
 ::: {style="background-color: rgba(0, 0, 0, .8); backdrop-filter: blur(5px); box-shadow: 0 0 1rem 0 rgba(0, 0, 0, .5); border-radius: 5px;;text-align:center;"}
-In 2024 less heterospecific pollen grains deposited!
+In 2024 slightly less heterospecific pollen grains deposited!
 :::
 
 </h2>
@@ -743,13 +764,13 @@ This should be tested. Somehow.
 
 ## Future steps?
 
-::::::::: r-stack
+::::::::::::::::::: r-stack
 ::: fragment
 ![](images/unnamed-chunk-4-1.png){fig-align="center" width="620" top="-20"}
 :::
 
 ::: fragment
-![ ](images/Blizna_Suc_pra_2_round.png){fig-align="center" width="500" top="-20"}
+![](images/Blizna_Suc_pra_2_round.png){fig-align="center" width="500" top="-20"}
 :::
 
 :::: fragment
@@ -771,7 +792,55 @@ Still collecting ideas.
 
 </h2>
 ::::
-:::::::::
+
+:::: fragment
+<h2 style="text-align:center;color:white;">
+
+::: {style="background-color: rgba(0, 0, 0, .8); backdrop-filter: blur(5px); box-shadow: 0 0 1rem 0 rgba(0, 0, 0, .5); border-radius: 5px;;text-align:center;"}
+But we know something from our previous work.
+:::
+
+</h2>
+::::
+
+::: fragment
+![](images/diurnal_variation.png){fig-align="center" width="800"}
+:::
+
+:::: fragment
+<h2 style="text-align:center;color:white;">
+
+::: {style="background-color: rgba(0, 0, 0, .8); backdrop-filter: blur(5px); box-shadow: 0 0 1rem 0 rgba(0, 0, 0, .5); border-radius: 5px;;text-align:center;"}
+The network structure varies also within a day!
+:::
+
+</h2>
+::::
+
+::: fragment
+![](images/clipboard-1788526568.png){fig-align="center" width="800"}
+:::
+
+:::: fragment
+<h2 style="text-align:center;color:white;">
+
+::: {style="background-color: rgba(0, 0, 0, .8); backdrop-filter: blur(5px); box-shadow: 0 0 1rem 0 rgba(0, 0, 0, .5); border-radius: 5px;;text-align:center;"}
+And it affects pollen transfer.
+:::
+
+</h2>
+::::
+
+:::: fragment
+<h2 style="text-align:center;color:white;">
+
+::: {style="background-color: rgba(0, 0, 0, .8); backdrop-filter: blur(5px); box-shadow: 0 0 1rem 0 rgba(0, 0, 0, .5); border-radius: 5px;;text-align:center;"}
+Does it affect the structure of pollen deposition too?
+:::
+
+</h2>
+::::
+:::::::::::::::::::
 
 ## EcoFlor 2026!
 
